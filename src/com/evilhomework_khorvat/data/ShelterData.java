@@ -1,4 +1,4 @@
-package com.evilhomework_khorvat;
+package com.evilhomework_khorvat.data;
 
 import com.evilhomework_khorvat.interfaces.DogsLoadedListener;
 import com.evilhomework_khorvat.interfaces.StorageLoadedListener;
