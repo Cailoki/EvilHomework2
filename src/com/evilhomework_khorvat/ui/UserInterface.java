@@ -1,4 +1,4 @@
-package com.evilhomework_khorvat;
+package com.evilhomework_khorvat.ui;
 
 import com.evilhomework_khorvat.interfaces.UI;
 
