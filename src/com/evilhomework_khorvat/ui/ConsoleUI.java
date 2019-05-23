@@ -1,6 +1,5 @@
 package com.evilhomework_khorvat.ui;
 
-import com.evilhomework_khorvat.UserInteraction;
 import com.evilhomework_khorvat.interfaces.UI;
 
 public class ConsoleUI implements UI {

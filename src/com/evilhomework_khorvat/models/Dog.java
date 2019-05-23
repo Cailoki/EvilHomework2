@@ -21,4 +21,9 @@ public class Dog extends Animal {
     public String getBreed() {
         return breed;
     }
+
+    public String toString(){
+        return "Dog[name=" + this.getName() + ",age=" + this.getAge() + ",breed=" + this.breed + ",dailyNeed=" +
+                this.getDailyNeed() + "]";
+    }
 }
