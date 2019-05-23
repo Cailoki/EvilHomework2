@@ -26,7 +26,7 @@ public class GraphicsUI implements UI {
         drawMenu();
     }
 
-    public void drawMenu() {
+    private void drawMenu() {
         System.out.println(MENU_TEXT);
     }
 }

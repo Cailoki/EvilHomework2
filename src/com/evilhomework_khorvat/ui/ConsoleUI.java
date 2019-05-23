@@ -17,7 +17,7 @@ public class ConsoleUI implements UI {
         onTitleDrawn();
     }
 
-    public void drawMenu() {
+    private void drawMenu() {
         System.out.println(MENU_TEXT);
     }
 
