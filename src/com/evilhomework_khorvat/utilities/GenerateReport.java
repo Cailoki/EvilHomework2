@@ -1,51 +1,44 @@
 package com.evilhomework_khorvat.utilities;
-
 import com.evilhomework_khorvat.models.Dog;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
-public class GenerateReport {
-    public static String generateWeeklyReport(List<Dog> doggies, Integer foodReserve){
-        String foodReport = "---------- Weekly Food Report ----------\n";
+public final class GenerateReport {
+    //Private constructor for utility class with static methods
+    private GenerateReport() {}
+
+    public static String generateWeeklyReport(List<Dog> dogs, Integer foodReserve){
+        String foodReportFileName = "weekly_food_report.txt";
         Integer totalDailyNeeds = 0;
 
-        for(int i = 0; i < doggies.size(); ++i){
-            int dailyNeed = doggies.get(i).getDailyNeed();
+        //StringBuilder over string +=
+        StringBuilder foodReport = new StringBuilder();
+        foodReport.append("---------- Weekly Food Report ----------\n");
+
+        //Foreach loop
+        for (Dog dog : dogs) {
+            int dailyNeed = dog.getDailyNeed();
             totalDailyNeeds += dailyNeed;
-            foodReport += doggies.get(i).getBreed() + " food requirements: " + dailyNeed*7 + "kg.\n";
-        }
-        foodReport += foodReportXDays(1, totalDailyNeeds, foodReserve);
-        foodReport += foodReportXDays(7, totalDailyNeeds, foodReserve);
 
-        saveReport(foodReport);
-        return foodReport;
+            foodReport.append(dog.getBreed()).append(" food requirements: ").append(dailyNeed * 7).append("kg.\n");
+        }
+
+        //Add info about remaining food reserve
+        foodReport.append(foodReportXDays(1, totalDailyNeeds, foodReserve));
+        foodReport.append(foodReportXDays(7,totalDailyNeeds,foodReserve));
+
+        //Save food report to a file
+        TextToFile.saveTextToFile(foodReport.toString(), foodReportFileName);
+
+        return foodReport.toString();
     }
 
-    public static String foodReportXDays(int days, Integer totalDailyNeeds, Integer foodReserve){
-        String data = "";
+    private static String foodReportXDays(int days, Integer totalDailyNeeds, Integer foodReserve){
         if(foodReserve > totalDailyNeeds*days)
-            data += "Note: There is enough food to feed all animals for " + days + "day/s. (Reserve: " +
-                    foodReserve + " Need: " + totalDailyNeeds*days + ")!\n";
+            return "Note: There is enough food to feed all animals for " + days + "day/s. (Reserve: " +
+                    foodReserve + " Need: " + totalDailyNeeds*days + ")\n";
         else
-            data += "Warning: There is NOT enough food to feed all animals for " + days + "day/s. (Reserve: " +
-                    foodReserve + " Need: " + totalDailyNeeds*days + ")!\n";
-        return data;
-    }
-
-    public static void saveReport(String report){
-        try {
-            String fileName = "weekly_food_report.txt";
-            String path = "src\\com\\evilhomework_khorvat\\data\\out\\" + fileName;
-            BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-            writer.write(report);
-            writer.close();
-            System.out.println("Report saved successfully.");
-        }
-        catch (IOException e){
-            System.out.println(e);
-        }
+            return "Warning: There is NOT enough food to feed all animals for " + days + "day/s! (Reserve: " +
+                    foodReserve + " Need: " + totalDailyNeeds*days + ")\n";
     }
 }

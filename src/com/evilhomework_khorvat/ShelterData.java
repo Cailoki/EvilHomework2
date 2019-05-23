@@ -1,7 +1,9 @@
-package com.evilhomework_khorvat.models;
+package com.evilhomework_khorvat;
 
 import com.evilhomework_khorvat.interfaces.DogsLoadedListener;
 import com.evilhomework_khorvat.interfaces.StorageLoadedListener;
+import com.evilhomework_khorvat.models.Dog;
+import com.evilhomework_khorvat.models.StorageEntry;
 import com.evilhomework_khorvat.utilities.DogParser;
 import com.evilhomework_khorvat.utilities.FileReader;
 import com.evilhomework_khorvat.utilities.StorageParser;
@@ -15,40 +17,52 @@ public class ShelterData implements DogsLoadedListener, StorageLoadedListener {
     private List<StorageEntry> storage;
     private List<Dog> dogs;
     private Map<String,StorageEntry> shelterMap = new LinkedHashMap<>();
+    private String[] paths; //[0]->dogs, [1]->storage
 
+    //Load data(animals/storage)
+    public ShelterData loadData(String[] paths){
+        this.paths = paths;
+        loadDogs();
+        return this;
+    }
+
+    //Getters
+    public List<StorageEntry> getStorage() {
+        return storage;
+    }
+    public List<Dog> getDogs() {
+        return dogs;
+    }
     public Integer getFoodReserve() {
         return foodReserve;
     }
 
-    public void loadDogs(String[] path){
+    //Setters
+    public void setFoodReserve(Integer foodReserve) {
+        this.foodReserve += foodReserve;
+    }
+
+    private void loadDogs(){
         try{
-            dogs = new FileReader(new DogParser()).readFromFile(path[0]);
-            onDogsLoaded(path[1]);
+            dogs = new FileReader<>(new DogParser()).readFromFile(paths[0]);
+            onDogsLoaded();
         } catch (Exception e){
             onError(e);
         }
     }
 
-    public List<StorageEntry> getStorage() {
-        return storage;
-    }
-
-    public List<Dog> getDogs() {
-        return dogs;
-    }
-
-    public void onDogsLoaded(String path){
+    public void onDogsLoaded(){
         System.out.println("Dogs loaded successfully.");
-        loadStorage(path);
+        loadStorage();
     }
 
     private void onError(Exception e){
-        System.out.println("Error reading report: " + e);
+        System.out.println("Error reading data from file, please rerun app with correct parameters:\n " + e);
     }
 
-    private void loadStorage(String path){
+    private void loadStorage(){
         try{
-            storage = new FileReader(new StorageParser()).readFromFile(path);
+            storage = new FileReader<>(new StorageParser()).readFromFile(paths[1]);
             onStorageLoaded();
         } catch (Exception e){
             onError(e);
@@ -62,8 +76,8 @@ public class ShelterData implements DogsLoadedListener, StorageLoadedListener {
     }
 
     private void calculateFoodReserves(){
-        for(int i = 0; i < storage.size(); ++i){
-            foodReserve += storage.get(i).getFoodReserve();
+        for (StorageEntry storageEntry : storage) {
+            foodReserve += storageEntry.getFoodReserve();
         }
     }
 
@@ -71,9 +85,5 @@ public class ShelterData implements DogsLoadedListener, StorageLoadedListener {
         for (int i=0; i<dogs.size(); i++) {
             shelterMap.put(dogs.get(i).getBreed(), storage.get(i));
         }
-    }
-
-    public void setFoodReserve(Integer foodReserve) {
-        this.foodReserve += foodReserve;
     }
 }

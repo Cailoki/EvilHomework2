@@ -2,29 +2,23 @@ package com.evilhomework_khorvat.models;
 
 public class Dog extends Animal {
     private String breed;
-    private Integer dailyNeed;
 
-    public Dog(String name, Integer age, String breed, Integer dailyNeed) {
-        super(name, age);
+    public Dog(String breed, String name, Integer age, Integer dailyNeed) {
+        super(name, age, dailyNeed);
         this.breed = breed;
-        this.dailyNeed = dailyNeed;
     }
 
     @Override
-    public void onBeingFed() {
+    public void onFinishedEating() {
         System.out.println(this.getName() + " is fed and barking happily.");
     }
 
     public Integer feed(){
-        onBeingFed();
-        return dailyNeed;
+        onFinishedEating();
+        return super.getDailyNeed();
     }
 
     public String getBreed() {
         return breed;
-    }
-
-    public Integer getDailyNeed() {
-        return dailyNeed;
     }
 }

@@ -1,9 +1,0 @@
----------- Weekly Food Report ----------
-﻿GoldenRetreiver food requirements: 35kg.
-GermanShepard food requirements: 35kg.
-GenericMedium food requirements: 21kg.
-GoldenRetreiver food requirements: 35kg.
-GenericMedium food requirements: 21kg.
-GenericMedium food requirements: 21kg.
-Note: There is enough food to feed all animals for 1day/s. (Reserve: 154 Need: 24)!
-Warning: There is NOT enough food to feed all animals for 7day/s. (Reserve: 154 Need: 168)!

@@ -2,33 +2,33 @@ package com.evilhomework_khorvat.utilities;
 
 import com.evilhomework_khorvat.interfaces.Parser;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.util.stream.Stream;
 
-public class FileReader<T extends Parser<T>> {
-    private T model;
+public class FileReader<T> {
+    private Parser<T> parser;
 
-    public FileReader(T model) {
-        this.model = model;
+    public FileReader(Parser<T> parser) {
+        this.parser = parser;
     }
 
     public List<T> readFromFile(String path){
-        Scanner reader = null;
-        List<T> data = new ArrayList<T>();
-        try {
-            reader = new Scanner(new File(path));
-            while (reader.hasNext()) {
-                data.add(model.parse(reader.nextLine()));
-            }
-        } catch (FileNotFoundException e) {
+        List<T> data = new ArrayList<>();
+
+        /*try (Stream<String> lines = Files.lines(Paths.get(ClassLoader.getSystemResource(path).toURI()))){
+            lines.forEach(s -> data.add(parser.parse(s)));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();*/
+
+        try (Stream<String> lines = Files.lines(Paths.get(path))) {
+            lines.forEach(s -> data.add(parser.parse(s)));
+        } catch (IOException e){
             e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
         }
         return data;
     }
